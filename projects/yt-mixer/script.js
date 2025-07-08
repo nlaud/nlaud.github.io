@@ -1,5 +1,5 @@
 //YT API stuff
-const YTAPIKEY = "AIzaSyBAjPywz9q-cbmZpz9vHtYdGlzmmqUOhx4";
+const YTAPIKEY = "";
 
 var tag = document.createElement('script');
 
