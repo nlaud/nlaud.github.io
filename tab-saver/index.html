@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tab Saver</title>
+    <script src="/script.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link
+      rel="stylesheet"
+      href="https://www.w3schools.com/lib/w3-theme-black.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+    />
+    <link rel="icon" type="image/x-icon" href="https://cdn.glitch.global/efe25942-3457-4222-baee-24c7b14003e6/favicon.ico?v=1721856996429">
+  </head>
+  <body onload = "loadSave();">
+    <header class="w3-container w3-padding background" id="myHeader">
+      <button class="btn" onclick="saveData();">
+        <i class="fa fa-save"></i>
+      </button>
+      <button class="btn" id="new" onclick="addContainer(this)">
+          <i class="fa fa-plus"></i>
+        </button>
+      <div class="w3-center">
+        <h4 style="font-family: 'Nunito', sans-serif">Main Page</h4>
+        <h1 class="w3-xxxlarge" style="font-family: 'Nunito', sans-serif">
+          Tab Saver
+        </h1>
+      </div>
+    </header>
+    <div>
+      <div id="containersGroup" class="w3-row-padding w3-margin-top">
+      </div>
+    </div>
+  </body>
+</html>

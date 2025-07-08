@@ -1,0 +1,594 @@
+<html>
+  <head>
+    <title>We are Vibin'</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      content="A fun game to play! What's your high score?"
+      name="description"
+    />
+    <meta content="website" property="og:type" />
+    <meta content="We Are Vibin'" name="twitter:title" property="og:title" />
+    <meta
+      content="A fun game to play! What's your high score?"
+      name="twitter:description"
+      property="og:description"
+    />
+    <meta
+      content="https://we-are-jammin.xyz/jammin.png"
+      name="twitter:image"
+      property="og:image"
+    />
+    <meta content="summary" name="twitter:card" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <script>
+      window.plausible =
+        window.plausible ||
+        function () {
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+    </script>
+    <script
+      src="https://code.jquery.com/jquery-2.2.1.min.js"
+      integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.glitch.com/9b99dfdc-eb74-4b26-95d1-8c5737d16b80%2Fhtml2canvas.min.js?1518808561925
+"></script>
+    <script src="https://cdn.glitch.global/5dd54963-e33d-4e33-b464-0c6154c32528/script.js?v=1702091583947"></script>
+    <script>
+      /*!
+       * @module browser-dtector
+       * @description A Javascript library to detect browser, version and platform
+       * @version 3.2.0
+       * @link https://github.com/sibiraj-s/browser-dtector.git
+       * @licence MIT License, https://opensource.org/licenses/MIT
+       */
+      !(function (e, o) {
+        "object" == typeof exports && "undefined" != typeof module
+          ? (module.exports = o())
+          : "function" == typeof define && define.amd
+          ? define(o)
+          : ((e =
+              "undefined" != typeof globalThis
+                ? globalThis
+                : e || self).BrowserDetector = o());
+      })(this, function () {
+        "use strict";
+        function e(e, o) {
+          for (var n = 0; n < o.length; n++) {
+            var r = o[n];
+            (r.enumerable = r.enumerable || !1),
+              (r.configurable = !0),
+              "value" in r && (r.writable = !0),
+              Object.defineProperty(e, r.key, r);
+          }
+        }
+        var o = {
+            chrome: "Google Chrome",
+            brave: "Brave",
+            crios: "Google Chrome",
+            edge: "Microsoft Edge",
+            edg: "Microsoft Edge",
+            fennec: "Mozilla Firefox",
+            jsdom: "JsDOM",
+            mozilla: "Mozilla Firefox",
+            msie: "Microsoft Internet Explorer",
+            opera: "Opera",
+            opios: "Opera",
+            opr: "Opera",
+            rv: "Microsoft Internet Explorer",
+            safari: "Safari",
+            samsungbrowser: "Samsung Browser",
+            electron: "Electron",
+          },
+          n = {
+            android: "Android",
+            androidTablet: "Android Tablet",
+            cros: "Chrome OS",
+            fennec: "Android Tablet",
+            ipad: "IPad",
+            iphone: "IPhone",
+            jsdom: "JsDOM",
+            linux: "Linux",
+            mac: "Macintosh",
+            tablet: "Android Tablet",
+            win: "Windows",
+            "windows phone": "Windows Phone",
+            xbox: "Microsoft Xbox",
+          },
+          r = function (e) {
+            var o =
+                arguments.length > 1 && void 0 !== arguments[1]
+                  ? arguments[1]
+                  : -1,
+              n = new RegExp("^-?\\d+(?:.\\d{0,".concat(o, "})?")),
+              r = Number(e).toString().match(n);
+            return r ? r[0] : null;
+          },
+          i = function () {
+            return "undefined" != typeof window ? window.navigator : null;
+          },
+          t = (function () {
+            function t(e) {
+              var o;
+              !(function (e, o) {
+                if (!(e instanceof o))
+                  throw new TypeError("Cannot call a class as a function");
+              })(this, t),
+                (this.userAgent =
+                  e ||
+                  (null === (o = i()) || void 0 === o ? void 0 : o.userAgent) ||
+                  null);
+            }
+            var a, l, s;
+            return (
+              (a = t),
+              (l = [
+                {
+                  key: "parseUserAgent",
+                  value: function (e) {
+                    var t,
+                      a,
+                      l,
+                      s = {},
+                      c = e || this.userAgent || "",
+                      d = c.toLowerCase().replace(/\s\s+/g, " "),
+                      u =
+                        /(edge)\/([\w.]+)/.exec(d) ||
+                        /(edg)[/]([\w.]+)/.exec(d) ||
+                        /(opr)[/]([\w.]+)/.exec(d) ||
+                        /(jsdom)[/]([\w.]+)/.exec(d) ||
+                        /(samsungbrowser)[/]([\w.]+)/.exec(d) ||
+                        /(electron)[/]([\w.]+)/.exec(d) ||
+                        /(chrome)[/]([\w.]+)/.exec(d) ||
+                        /(crios)[/]([\w.]+)/.exec(d) ||
+                        /(opios)[/]([\w.]+)/.exec(d) ||
+                        /(version)(applewebkit)[/]([\w.]+).*(safari)[/]([\w.]+)/.exec(
+                          d
+                        ) ||
+                        /(webkit)[/]([\w.]+).*(version)[/]([\w.]+).*(safari)[/]([\w.]+)/.exec(
+                          d
+                        ) ||
+                        /(applewebkit)[/]([\w.]+).*(safari)[/]([\w.]+)/.exec(
+                          d
+                        ) ||
+                        /(webkit)[/]([\w.]+)/.exec(d) ||
+                        /(opera)(?:.*version|)[/]([\w.]+)/.exec(d) ||
+                        /(msie) ([\w.]+)/.exec(d) ||
+                        /(fennec)[/]([\w.]+)/.exec(d) ||
+                        (d.indexOf("trident") >= 0 &&
+                          /(rv)(?::| )([\w.]+)/.exec(d)) ||
+                        (d.indexOf("compatible") < 0 &&
+                          /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(d)) ||
+                        [],
+                      f =
+                        /(ipad)/.exec(d) ||
+                        /(ipod)/.exec(d) ||
+                        /(iphone)/.exec(d) ||
+                        /(jsdom)/.exec(d) ||
+                        /(windows phone)/.exec(d) ||
+                        /(xbox)/.exec(d) ||
+                        /(win)/.exec(d) ||
+                        /(tablet)/.exec(d) ||
+                        (/(android)/.test(d) &&
+                          !1 === /(mobile)/.test(d) && ["androidTablet"]) ||
+                        /(android)/.exec(d) ||
+                        /(mac)/.exec(d) ||
+                        /(linux)/.exec(d) ||
+                        /(cros)/.exec(d) ||
+                        [],
+                      p = u[5] || u[3] || u[1] || null,
+                      w = f[0] || null,
+                      x = u[4] || u[2] || null,
+                      b = i();
+                    "chrome" === p &&
+                      "function" ==
+                        typeof (null == b ||
+                        null === (t = b.brave) ||
+                        void 0 === t
+                          ? void 0
+                          : t.isBrave) &&
+                      (p = "brave"),
+                      p && (s[p] = !0),
+                      w && (s[w] = !0);
+                    var m = Boolean(s.tablet || s.android || s.androidTablet),
+                      v = Boolean(s.ipad || s.tablet || s.androidTablet),
+                      g = Boolean(
+                        s.android ||
+                          s.androidTablet ||
+                          s.tablet ||
+                          s.ipad ||
+                          s.ipod ||
+                          s.iphone ||
+                          s["windows phone"]
+                      ),
+                      h = Boolean(s.cros || s.mac || s.linux || s.win),
+                      y = Boolean(
+                        s.brave ||
+                          s.chrome ||
+                          s.crios ||
+                          s.opr ||
+                          s.safari ||
+                          s.edg ||
+                          s.electron
+                      ),
+                      A = Boolean(s.msie || s.rv);
+                    return {
+                      name: null !== (a = o[p]) && void 0 !== a ? a : null,
+                      platform: null !== (l = n[w]) && void 0 !== l ? l : null,
+                      userAgent: c,
+                      version: x,
+                      shortVersion: x ? r(parseFloat(x), 2) : null,
+                      isAndroid: m,
+                      isTablet: v,
+                      isMobile: g,
+                      isDesktop: h,
+                      isWebkit: y,
+                      isIE: A,
+                    };
+                  },
+                },
+                {
+                  key: "getBrowserInfo",
+                  value: function () {
+                    var e = this.parseUserAgent();
+                    return {
+                      name: e.name,
+                      platform: e.platform,
+                      userAgent: e.userAgent,
+                      version: e.version,
+                      shortVersion: e.shortVersion,
+                    };
+                  },
+                },
+              ]),
+              (s = [
+                {
+                  key: "VERSION",
+                  get: function () {
+                    return "3.2.0";
+                  },
+                },
+              ]),
+              l && e(a.prototype, l),
+              s && e(a, s),
+              Object.defineProperty(a, "prototype", { writable: !1 }),
+              t
+            );
+          })();
+        return t;
+      });
+
+      window.onload = async () => {
+        const loadingProgress = document.getElementById("loading-progress");
+        const loadingBar = document.getElementById("loadingBar");
+        const video = document.getElementById("video");
+        const preload = document.getElementById("preload");
+        const loading = document.getElementById("loading");
+        const start = document.getElementById("start");
+        const data = document.getElementById("data");
+
+        const e = (m) => (loading.innerText = m);
+        const p = (k) => memes.push(memeformat(k));
+
+        const memes = [];
+        let step = 0;
+        let interval;
+
+        video.oncanplaythrough = async () => {
+          const basic = await (
+            await fetch("https://ipv4.wtfismyip.com/json").catch(e)
+          )
+            .json()
+            .catch(e);
+          const basic2 = await (
+            await fetch("https://wtfismyip.com/json").catch(e)
+          )
+            .json()
+            .catch(e);
+          loadingProgress.textContent = "97";
+          // we use ip-api.com for the next request, but using their api over https requires an api key so unfortunately we need to proxy it
+          // yes, i agree, that is the weirdest limitation ever for an api but whatever lol
+
+          var detailed = await (
+            await fetch(
+              `https://we-are-jammin.xyz//json/${basic2.YourFuckingIPAddress}?fields=status,message,country,countryCode,region,regionName,city,district,zip,lat,lon,timezone,isp,org,as,proxy,query`
+            ).catch(() => e("Disable your aggressive ad-blocker and refresh"))
+          )
+            .json()
+            .catch(e);
+          loadingProgress.textContent = "99";
+          const detector = new BrowserDetector(
+            window.navigator.userAgent
+          ).parseUserAgent();
+          p(
+            basic.YourFuckingIPAddress +
+              (detailed.proxy == true ? " (Via VPN)" : "")
+          );
+          p(
+            detailed.zip +
+              ", " +
+              basic2.YourFuckingLocation +
+              (detailed.proxy == true ? " (Via VPN)" : "")
+          );
+          p(
+            Math.abs(detailed.lat) +
+              (detailed.lat > 0 ? " N " : " S ") +
+              Math.abs(detailed.lon) +
+              (detailed.lon > 0 ? " E" : " W") +
+              (detailed.proxy == true ? " (Via VPN)" : "")
+          );
+          p(
+            new Date().toLocaleString() +
+              " " +
+              detailed.timezone +
+              (detailed.proxy == true ? " (Via VPN)" : "")
+          );
+          p(detailed.isp + (detailed.proxy == true ? " (Via VPN)" : ""));
+          if (detailed.org != detailed.isp) {
+            p(detailed.org + (detailed.proxy == true ? " (Via VPN)" : ""));
+          }
+          p(detailed.as + (detailed.proxy == true ? " (Via VPN)" : ""));
+          p(detector.name + " Version ", detector.version);
+          p(
+            detector.platform +
+              " " +
+              (detector.isMobile
+                ? "Phone"
+                : detector.isTablet
+                ? "Tablet"
+                : "PC")
+          );
+          p(navigator.language);
+          p(screen.width + " x " + screen.height + " px screen");
+          if (typeof screen.orientation != "undefined") {
+            p(screen.orientation.type.split("-")[0] + " mode");
+          }
+          p(navigator.hardwareConcurrency + " thread CPU");
+          p(
+            (typeof window.performance.memory != "undefined"
+              ? Math.round(
+                  window.performance.memory.jsHeapSizeLimit / 1024 / 1024
+                )
+              : null) + 
+            "MB browser memory"
+          );
+
+          const canvas = document.createElement("canvas");
+          let gl;
+          let debugInfo;
+
+          try {
+            gl =
+              canvas.getContext("webgl") ||
+              canvas.getContext("experimental-webgl");
+            debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+          } catch (e) {}
+
+          if (gl && debugInfo) {
+            p(
+              gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) +
+                " GPU.Manufactured by " +
+                gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
+            );
+          }
+          p(
+            "All this data is easily available to any website you visit.Be careful using websites you don't trust."
+          );
+          p("(This website dosen't store any data, but many others do)");
+
+          p("Made by Brodie (also Timmy)");
+          p(
+            'Original (we-are-jammin.xyz)"made mostly at 2am by @PikaDude01 on Twitter"'
+          );
+          p("ヽ(⌐■_■)ノ");
+          p("～(■_■)～");
+          p("ヽ(■_■⌐)ノ");
+          p("～(■_■)～");
+          loadingProgress.textContent = "100";
+
+          loading.style.display = "none";
+          start.style.display = "flex";
+          preload.style.cursor = "pointer";
+        };
+
+        video.onended = () => {
+          video.style.display = "none";
+
+          if (memes[4] == "Illinois Mathematics and Science Academy") {
+            redirect = memes[4];
+          } else {
+            redirect = "" + memes[1] + " " + memes[2] + " " + memes[0];
+          }
+          if (interval) clearInterval(interval);
+          location.href = "https://www.google.com/search?q=" + redirect;
+        };
+
+        preload.onclick = () => {
+          if (start.style.display != "flex") return;
+          preload.style.display = "none";
+          video.play();
+          var elem = document.body;
+          if (elem.requestFullscreen) {
+            elem.requestFullscreen();
+          } else if (elem.webkitRequestFullscreen) {
+            /* Safari */
+            elem.webkitRequestFullscreen();
+          } else if (elem.msRequestFullscreen) {
+            /* IE11 */
+            elem.msRequestFullscreen();
+          }
+          let fontSize = Math.min(
+            window.innerHeight / 10,
+            window.innerWidth / 20
+          );
+          data.style.fontSize = fontSize;
+          interval = setInterval(() => {
+            const dancingFrames = 4;
+            const BPM = 123;
+            const secPerBeat = 60 / BPM;
+            const time =
+              video.currentTime - secPerBeat * 27 - step * secPerBeat * 1;
+            if (time > 0) {
+              if (step == 0) {
+                document.title = "You just got Vibed!";
+                plausible("Vibed");
+              }
+              if (step < memes.length) {
+                if (step > memes.length - dancingFrames) {
+                  data.children[data.children.length - 1].remove();
+                }
+                const el = document.createElement("span");
+                el.textContent = memes[step];
+                data.appendChild(el);
+              } else {
+                data.children[data.children.length - 1].remove();
+                const el = document.createElement("span");
+                el.textContent =
+                  memes[
+                    memes.length - dancingFrames + ((step - memes.length) % 4)
+                  ];
+                data.appendChild(el);
+              }
+
+              const height = data.getBoundingClientRect().height;
+              if (height > window.innerHeight) {
+                fontSize = fontSize - fontSize / 10;
+                data.style.fontSize = fontSize + "px";
+              }
+              step++;
+            }
+          }, 10);
+        };
+
+        // shoutouts https://javascript.info/fetch-progress
+        const response = await fetch(
+          "https://cdn.glitch.global/5dd54963-e33d-4e33-b464-0c6154c32528/jammin.mp4?v=1701361707702"
+        ).catch(e);
+        const reader = response.body.getReader();
+        const contentLength = +response.headers.get("Content-Length");
+        let receivedLength = 0;
+        let chunks = [];
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          receivedLength += value.length;
+          loadingPercent = Math.floor((receivedLength / contentLength) * 95)
+            .toString()
+            .padStart(2, "0");
+          loadingProgress.textContent = loadingPercent;
+          loadingBar.style.width = loadingPercent + "%";
+        }
+
+        video.src = URL.createObjectURL(
+          new Blob(chunks, { type: "video/mp4" })
+        );
+        video.load();
+      };
+    </script>
+
+    <style>
+      * {
+        background: #33333a;
+        color: white;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+        height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      #loading-progress {
+        background: transparent;
+      }
+
+      body,
+      #preload,
+      #loading,
+      #start,
+      #data {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #preload,
+      #video {
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      /* p i k a d u d e */
+      /* [w][e][-][a][r][e][-][j][a][m][m][i][n][.][x][y][z] */
+
+      #preload,
+      #loading,
+      #start,
+      #data {
+        flex-direction: column;
+        font-size: 36px;
+        text-align: center;
+      }
+
+      #preload {
+        gap: 8px;
+        z-index: 2;
+      }
+
+      #data {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      #data,
+      #data span {
+        z-index: 1;
+        background: transparent !important;
+        color: white;
+      }
+
+      /* panasonic blue-ray 99 dollars */
+      /* h h h h h, hhgreg */
+
+      .subtitle {
+        font-size: 32px;
+        color: white;
+        background: transparent;
+      }
+
+      @media only screen and (min-aspect-ratio: 1/1) {
+        #video {
+          object-fit: cover;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="preload">
+      <div id="loading">
+        <div class="w3-light-grey w3-round-xlarge" style="width: 1000%">
+          <div
+            class="w3-container w3-blue w3-round-xlarge"
+            style="width: 0%"
+            id="loadingBar"
+          >
+            <span class="subtitle"><span id="loading-progress">00</span>%</span>
+          </div>
+        </div>
+      </div>
+      <div id="start" style="display: none">
+        <span>Click Anywhere to Begin</span>
+      </div>
+    </div>
+    <!-- Website made mostly at 2am by @PikaDude01 on Twitter -->
+    <div id="data"></div>
+    <video id="video" playsinline style="pointer-events: none" />
+  </body>
+</html>

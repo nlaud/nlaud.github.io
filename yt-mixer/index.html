@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--Meta tags for SEO-->
+    <title>Music</title>
+    <link rel="icon" href="https://cdn.glitch.global/826d0cce-217e-4ea6-8f80-5c0e9c71dcd0/Icon?v=1734147202314" />
+    <meta name="description" content="Website using youtube for music" />
+    <meta name="keywords" content="Music, Playlist, Youtube" />
+    <meta name="author" content="blazestorm" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--External CSS Stuff-->
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+    />
+    <!--Internal CSS imports-->
+    <link rel="stylesheet" href="style.css" />
+    <!--Internal JS imports-->
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="column side">
+      <h2 class="sticky">Playlists</h2>
+      <div id = "playlistList">
+        <div class="playlistData" draggable="true" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragstart="dragStart(event)">
+          <i class="fa fa-play" aria-hidden="true"></i>
+          <h3 class="playlistName">Playlist Name</h3>
+        </div>
+      </div>
+      <button id="newPlaylist">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+      </button>
+      <button id="importPlaylist">
+          <i class="fa fa-download" aria-hidden="true"></i>
+      </button>
+      <br>
+    </div>
+
+    <div class="column middle">
+      <input class="sticky" style="margin-bottom: 0" id="playlistName" type="text" value="Current Playlist">
+
+      <h4 id="playlistDuration">12:34</h4>
+      
+      <div class="playlistButtons">
+        <button id="deletePlaylist">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+        <button id="addVideo">
+          <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+        <button id="play">
+          <i class="fa fa-play" aria-hidden="true" style="font-size: 2.5em"></i>
+        </button>
+        <button id="exportPlaylist">
+          <i class="fa fa-upload" aria-hidden="true"></i>
+        </button>
+        <button id="shufflePlaylist">
+          <i class="fa fa-random" aria-hidden="true"></i>
+        </button>
+      </div>
+      
+      <button id="volumeUp">
+        <i class="fa fa-volume-up" aria-hidden="true" id="volumeIcon"></i> <input id = "volumeSlider" type="range" min="1" max="100" value="100" style="width:75%">
+      </button>
+      
+      <table style="width: 100%">
+        <tbody id="tracksTable">
+        <tr style="position:sticky" class="tableHeader">
+          <th style="width: 75%">Title</th>
+          <th style="width: 12.5%">
+            <i class="fa fa-clock-o" aria-hidden="true"></i>
+          </th>
+          <th style="width: 12.5%">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+          </th>
+        </tr>
+        <tr class="trackRow" draggable="true" ondragend="dragEnd(event)" ondragover="dragOver(event)" ondragstart="dragStart(event)">
+          <td>Song Title</td>
+          <td>1:00</td>
+          <td style="display: flex;justify-content: space-between;">
+            <div>
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </div> 
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="column side">
+      <h2 class="sticky">Currently Playing</h2>
+      <div id="playerHolder">
+        <div id="player"></div>
+      </div>
+      <h4 id="currentPlayingTitle">Song Title</h4>
+      <button id="currentPlayingProgress">
+        <label>0:00</label><input id = "currentPlayingBar" type="range" min="1" max="100" value="0" style="width:66%"><label id="currentPlayingDuration">0:00</label>
+      </button>
+      <h3>Queue</h3>
+      <div id="queueHolder">
+        <h4 class="queueVideo">Name</h4>
+      </div>
+    </div>
+    
+    <button id="settingsButton">
+      <i class="fa fa-cog" aria-hidden="true"></i>
+    </button>
+    
+    <!-- Settings Modal -->
+    <div id="modalBackground" class="modal">
+
+      <!-- Modal content -->
+      <div class="settingsModal">
+        <button id="closeSettingsButton"><i class="fa fa-times" aria-hidden="true"></i></button>
+        <h1 style="margin-top:0px;">
+          Settings
+        </h1>
+        <div class="settingsOptions">
+          <h1 style="display:inline;">Theme</h1><button id="resetThemeButton" ><i class="fa fa-refresh" aria-hidden="true"></i></button><br>
+          
+          <h3><u>Background Color</u></h3><br><input class="settingsInput" id="bgColorSetting" type="text" value=""><br>
+          <h3><u>Text/Icons Color</u></h3><br><input class="settingsInput" id="textColorSetting" type="text" value=""><br>
+          <h3><u>Highlight Color</u></h3><br><input class="settingsInput" id="accentColorSetting" type="text" value=""><br>
+        </div>
+        <button id="saveSettingsButton" style="position:absolute; bottom:calc(10vh + 10px);  transform: translate(-50%, 0%);"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+      </div>
+      
+    </div>
+  </body>
+</html>

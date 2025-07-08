@@ -1,0 +1,362 @@
+:root{
+  /* Color palette */
+  --bgColor:#F5F4F6;
+  --hoverBgColor:#EBEAEC;
+  --activeBgColor:#e1e0e2;
+  --textColor:#131614;
+  --accentColor:#20DF9F;
+}
+
+/* General */
+body{
+  /* Colors */
+  background-color:var(--bgColor);
+  color:var(--textColor);
+  scrollbar-color: var(--textColor) var(--bgColor);
+  
+  /* Text */
+  font-family: "Nunito", sans-serif;
+  text-align:center;
+  
+  /* Formatting */
+  margin: 0;
+  
+  /* Prevents scrolling off screen */
+  overflow:hidden;
+  
+  /*Transitions*/
+  transition:0.2s;
+}
+h1{
+  font-size: 3rem;
+}
+h2{
+  font-size: 2rem;
+}
+h3{
+  font-size: 1.5rem;
+}
+p{
+  font-size: 1rem;
+}
+i{
+  transition:0.2s;
+  color:var(--textColor);
+}
+label{
+  color:var(--textColor);
+}
+/* Page Layout */
+.column {
+  background-color:var(--bgColor);
+  float: left;
+  padding: 0% 0.5%;
+  height:100vh;
+  overflow:auto;
+}
+
+.column.side {
+  width: 24%;
+  overflow-x: hidden;
+}
+
+.column.middle {
+  width: 48%;
+  margin: 0% 0.5%;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 850px) {
+  .column.side, .column.middle {
+    width: 100%;
+  }
+  .column.side{
+    height:50vh;
+  }
+  .column.middle{
+    height:50vh;
+  }
+  body{
+    overflow:auto;
+  }
+}
+
+/* Sticky elements stay on screen */
+.sticky{
+  position:sticky;
+  top: 0px;
+  background-color:var(--bgColor);
+}
+
+/* Playlists */
+.playlistData{
+  /* Spacing */
+  margin:8px;
+  border-radius:10px;
+  
+  padding: 2.5% 5%;
+  display: flex;
+  
+  align-items: center;
+  /* Colors */
+  background-color: var(--bgColor);
+  
+  /* Animation */
+  transition: 0.15s;
+}
+
+.playlistData:hover{
+  /* Animation: Color + Shadow */
+  background-color: var(--hoverBgColor);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.075), 0 3px 8px 0 rgba(0, 0, 0, 0.075);
+  
+  /* Animation: Spacing / Zoom */
+  padding: 2.5% 7.5%;
+}
+
+.playlistData:active{
+  /* Animation:Color */
+  background-color: var(--activeBgColor);
+}
+
+.playlistName{
+  /* Spacing */
+  margin:0;
+  padding: 0% 5%;
+  
+  /* Overflow if too long */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Playlist and Queue Buttons */
+button{
+  /* Text + Spacing */
+  font-size: 2rem;
+  padding: 1.5% 2%;
+  margin:5px;
+  
+  /* Border */
+  border:none;
+  border-radius:5px;
+  
+  /* BG Color */
+  background-color: var(--bgColor);
+  
+  /* Animations */
+  transition:0.2s;
+}
+
+button:hover{
+  /* Animation: Color + Shadow */
+  background-color: var(--hoverBgColor);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.075), 0 3px 8px 0 rgba(0, 0, 0, 0.075);
+  
+  /* Animation:Spacing / Zoom */
+  padding: 1.5% 2.75%
+}
+button:active{
+  /* Animation:Color */
+  background-color: var(--activeBgColor);
+}
+
+/*Song Queue */
+.queueVideo{
+  /* Spacing + Shape */
+  margin:0px 8px;
+  border-radius:10px;
+  padding: 2.5% 5%;
+  align-items: center;
+  text-align:left;
+  
+  /* Color */
+  background-color: var(--bgColor);
+  
+  /* Animation */
+  transition: 0.15s;
+  
+  /* Overflow if too long */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queueVideo:hover{
+  /* Animation: Color + Shadow */
+  background-color: var(--hoverBgColor);
+  /* box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.075), 0 3px 8px 0 rgba(0, 0, 0, 0.075); */
+  
+  /* Animation: Spacing / Zoom */
+  padding: 2.5% 7.5%;
+}
+
+.queueVideo:active{
+  /* Animation: Color */
+  background-color: var(--activeBgColor);
+}
+
+/* Current Playlist Menu */
+.playlistButtons{
+  /* Spacing */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: sticky;
+  top: 4.1rem;
+  z-index:1;
+  
+  /* Color */
+  background-color:var(--bgColor);
+}
+
+#playlistName{
+  /* Spacing */
+  z-index:1;
+  text-align:center;
+  margin-top:5px;
+  border: none !important;
+  font-family: "Nunito", sans-serif;
+  width:100%;
+  color:var(--textColor);
+  
+  /* Overflow if too long */
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size:3rem;
+}
+#plalistName:active{
+  /* Border Hiding */
+  border:none;
+}
+
+#playlistDuration{
+  /* Spacing */
+  margin-bottom:0;
+  margin-top:0.5%;
+}
+#volumeSlider{
+  accent-color:var(--accentColor);
+}
+#currentPlayingProgress{
+  /* Size + Spacing */
+  font-size: 1em;
+  width:100%;
+}
+#currentPlayingTitle{
+  /* Overflow if too long */
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#currentPlayingBar{
+  accent-color:var(--accentColor);
+}
+/* Playlist Songs Table */
+table{
+  /* Overflow if too long */
+  overflow-x: auto;
+  overflow-y : hidden;
+  white-space: nowrap;
+  
+  /* Spacing */
+  table-layout: fixed;
+  width:100%;
+}
+td{
+  /* Overflow if too long */
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  transition: 0.1s;
+}
+
+td:hover{
+  padding: 0% 2.5%;
+}
+tr{
+  /* Color */
+  background-color: var(--bgColor);
+  
+  /* Spacing */
+  text-align:left;
+  
+  /* Animation */
+  transition: 0.1s;
+}
+
+tr:not(.tableHeader):hover{
+  /* Animation: Color */
+  background-color: var(--hoverBgColor);
+}
+
+tr:not(.tableHeader):active{
+  /* Animation: Color */
+  background-color: var(--activeBgColor);
+}
+
+#settingsButton{
+  position:absolute;
+  bottom:0;
+  left:0;
+  
+  margin:0.75%;
+  padding: 0.5% 1%;
+}
+#settingsButton:hover{
+  padding: 0.75% 1.25%;
+}
+
+/* Modal Background */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 0px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.settingsModal {
+  width:80vw;
+  height:80vh;
+  
+  background-color:var(--bgColor);
+  
+  margin:10vh auto;
+  padding:10px;
+}
+
+#closeSettingsButton{
+  position:absolute;
+  right:calc(10vw + 5px);
+  
+  padding:0.5% 1%;
+}
+
+#closeSettingsButton:hover{
+  padding: 0.75% 1.2%;
+}
+
+.settingsOptions{
+  text-align:left;
+  padding:10px;
+}
+.settingsOptions h3{
+  display:inline;
+}
+.settingsOptions input{
+  background-color:var(--bgColor);
+  
+  /* Spacing */
+  text-align:left;
+  border: none !important;
+  font-family: "Nunito", sans-serif;
+  font-size:1.5rem;
+}
