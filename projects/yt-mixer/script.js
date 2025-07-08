@@ -1,5 +1,6 @@
 //YT API stuff
-const YTAPIKEY = "";
+require('dotenv').config();
+const YTAPIKEY = process.env.API_KEY;
 
 var tag = document.createElement('script');
 
