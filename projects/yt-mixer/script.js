@@ -1,6 +1,5 @@
 //YT API stuff
-require('dotenv').config();
-const YTAPIKEY = process.env.API_KEY;
+const YTAPIKEY = "";// Add your YouTube API key here(Otherwise you get ads)
 
 var tag = document.createElement('script');
 
