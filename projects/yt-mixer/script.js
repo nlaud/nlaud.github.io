@@ -1,5 +1,5 @@
 //YT API stuff
-const YTAPIKEY = "";// Add your YouTube API key here(Otherwise you get ads)
+var YTAPIKEY = "";// Add your YouTube API key here(Otherwise you get ads)
 
 var tag = document.createElement('script');
 
