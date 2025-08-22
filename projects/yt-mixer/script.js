@@ -1,5 +1,34 @@
-//YT API stuff
-var YTAPIKEY = "";// Add your YouTube API key here(Otherwise you get ads)
+//YT API saveing and cookie storage
+function setCookie(cname,cvalue,exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + (exdays*24*60*60*1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+let YTAPIKEY = getCookie("apikey");
+if(YTAPIKEY == ""){
+  YTAPIKEY = prompt("Enter your YouTube API KEY (Available free by following the instructions at https://developers.google.com/youtube/v3/getting-started):", "");
+  if (YTAPIKEY != "" && YTAPIKEY != null) {
+    setCookie("apikey", YTAPIKEY, 365);
+  }
+}
 
 var tag = document.createElement('script');
 
@@ -384,6 +413,13 @@ document.getElementById("volumeSlider").oninput = function(){
 document.getElementById("currentPlayingBar").oninput = function(){
   player.seekTo(this.value / 100 * currentClip.duration + currentClip.startTime, true)
   currentPlaylist.playPauseVideo();
+}
+
+document.getElementById("apiResetButton").onclick = function(){
+  YTAPIKEY = prompt("Enter your YouTube API KEY (Available free by following the instructions at https://developers.google.com/youtube/v3/getting-started):", "");
+  if (YTAPIKEY != "" && YTAPIKEY != null) {
+    setCookie("apikey", YTAPIKEY, 365);
+  }
 }
 
 //Autoplaying next song
