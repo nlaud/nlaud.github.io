@@ -6,6 +6,41 @@ const randomRgbColor = () => {
   return "rgb(" + r + "," + g + "," + b + ")";
 };
 
+//From: https://stackoverflow.com/questions/13586999/color-difference-similarity-between-two-values-with-js
+function deltaE(rgbA, rgbB) {
+  let labA = rgb2lab(rgbA);
+  let labB = rgb2lab(rgbB);
+  let deltaL = labA[0] - labB[0];
+  let deltaA = labA[1] - labB[1];
+  let deltaB = labA[2] - labB[2];
+  let c1 = Math.sqrt(labA[1] * labA[1] + labA[2] * labA[2]);
+  let c2 = Math.sqrt(labB[1] * labB[1] + labB[2] * labB[2]);
+  let deltaC = c1 - c2;
+  let deltaH = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC;
+  deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH);
+  let sc = 1.0 + 0.045 * c1;
+  let sh = 1.0 + 0.015 * c1;
+  let deltaLKlsl = deltaL / (1.0);
+  let deltaCkcsc = deltaC / (sc);
+  let deltaHkhsh = deltaH / (sh);
+  let i = deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh;
+  return i < 0 ? 0 : Math.sqrt(i);
+}
+
+function rgb2lab(rgb){
+  let r = rgb[0] / 255, g = rgb[1] / 255, b = rgb[2] / 255, x, y, z;
+  r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+  g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+  b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+  x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+  y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
+  z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+  x = (x > 0.008856) ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
+  y = (y > 0.008856) ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
+  z = (z > 0.008856) ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
+  return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
+}
+
 function getMousePos(canvas, evt) {
   var rect = canvas.getBoundingClientRect();
   return {
@@ -102,7 +137,9 @@ class Boid {
     cohesionWeight,
     wallWeight,
     protectedRange,
-    visibleRange
+    visibleRange,
+    colorism,
+    colorismFactor
   ) {
     for (var object of this.objects) {
       object.separationWeight = separationWeight;
@@ -111,6 +148,8 @@ class Boid {
       object.wallWeight = wallWeight;
       object.protectedRange = protectedRange;
       object.visibleRange = visibleRange;
+      object.colorism = colorism;
+      object.colorismFactor = colorismFactor;
     }
   }
 
@@ -162,8 +201,9 @@ class Boid {
 class BoidObject {
   constructor(xPos, yPos, velocity) {
     this.speedFactor = 0.7;
-
-    this.size = new Vector2D(15, 30);
+    
+    this.scale = 1.1
+    this.size = new Vector2D(this.scale * 15, this.scale * 30);
 
     this.color = randomRgbColor();
     this.trailLength = 0;
@@ -176,13 +216,16 @@ class BoidObject {
     this.cohesionWeight = 0.02;
     this.cursorWeight = 0;
 
+    this.colorism = true;
+    this.colorismFactor = 3;
+
     this.wallWeight = 0; //75
     this.wallMargin = 250;
 
-    this.protectedRange = 11;
+    this.protectedRange = 11 * this.scale;
     this.visibleRange = 35;
 
-    this.maxSpeed = 10;
+    this.maxSpeed = 8;
     this.minSpeed = 2;
 
     this.acceleration = 0.4; //Closer to 0 is more smooth, closer to 1 is more responsive
@@ -196,6 +239,18 @@ class BoidObject {
       (Math.random() * 2 - 1) * this.maxSpeed
     );
   }
+  colorSimilarity(otherBoidObj){
+    if(!this.colorism){
+      return 1
+    }
+    const toRGBArray = rgbStr => rgbStr.match(/\d+/g).map(Number);
+    var rgb1 = toRGBArray(this.color)
+    var rgb2 = toRGBArray(otherBoidObj.color)
+    var colorDifference = deltaE(rgb1, rgb2)
+    var similarity = (100 - colorDifference * 2) / 100
+    var powSimilarity = Math.pow(Math.abs(similarity), 0.33) * Math.sign(similarity)
+    return powSimilarity * this.colorismFactor
+  }
 
   updateVelocity(boid) {
     var separationVelocity = new Vector2D(0, 0);
@@ -203,7 +258,7 @@ class BoidObject {
     for (var boidObject of boid.objects) {
       var distance = Math.sqrt(
         Math.pow(this.pos.x - boidObject.pos.x, 2) +
-          Math.pow(this.pos.y - boidObject.pos.y, 2)
+        Math.pow(this.pos.y - boidObject.pos.y, 2)
       );
       if (boidObject != this && distance < this.protectedRange) {
         //Not this boid and distance small enough
@@ -223,8 +278,8 @@ class BoidObject {
       );
       if (distance < this.visibleRange) {
         //Not this boid and distance small enough
-        boidVelocity.x += boidObject.velocity.x;
-        boidVelocity.y += boidObject.velocity.y;
+        boidVelocity.x += this.colorism ? boidObject.velocity.x * this.colorSimilarity(boidObject) : boidObject.velocity.x;
+        boidVelocity.y += this.colorism ? boidObject.velocity.y * this.colorSimilarity(boidObject) : boidObject.velocity.y;
 
         visibleBoids += 1;
       }
@@ -236,7 +291,7 @@ class BoidObject {
     var alignmentVelocity = new Vector2D(boidVelocity.x, boidVelocity.y);
 
     //Cohesion
-    var boidPos = new Vector2D(0, 0);
+    var cohesionVelocity = new Vector2D(0, 0);
     var visibleBoids = 0;
 
     for (var boidObject of boid.objects) {
@@ -246,21 +301,17 @@ class BoidObject {
       );
       if (distance < this.visibleRange) {
         //Not this boid and distance small enough
-        boidPos.x += boidObject.pos.x;
-        boidPos.y += boidObject.pos.y;
+        cohesionVelocity.x += this.colorism ? (boidObject.pos.x - this.pos.x) * this.colorSimilarity(boidObject) : (boidObject.pos.x - this.pos.x);
+        cohesionVelocity.y += this.colorism ? (boidObject.pos.y - this.pos.y) * this.colorSimilarity(boidObject) : (boidObject.pos.y - this.pos.y);
 
         visibleBoids += 1;
       }
     }
 
     if (visibleBoids > 0) {
-      boidPos.x = boidPos.x / visibleBoids;
-      boidPos.y = boidPos.y / visibleBoids;
+      cohesionVelocity.x = cohesionVelocity.x / visibleBoids;
+      cohesionVelocity.y = cohesionVelocity.y / visibleBoids;
     }
-    var cohesionVelocity = new Vector2D(
-      boidPos.x - this.pos.x,
-      boidPos.y - this.pos.y
-    );
 
     var wallVelocity = new Vector2D(0, 0);
 
