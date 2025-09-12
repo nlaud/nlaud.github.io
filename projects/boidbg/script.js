@@ -202,7 +202,7 @@ class BoidObject {
   constructor(xPos, yPos, velocity) {
     this.speedFactor = 0.7;
     
-    this.scale = 1.1
+    this.scale = 1.0
     this.size = new Vector2D(this.scale * 15, this.scale * 30);
 
     this.color = randomRgbColor();
@@ -458,11 +458,11 @@ class BoidObject {
     // Begin the path
     ctx.globalAlpha = this.opacity;
     ctx.beginPath();
-    ctx.moveTo(vertices[0].x, vertices[0].y);
+    ctx.moveTo(parseInt(vertices[0].x), parseInt(vertices[0].y));
 
     // Draw lines to each vertex
     for (let i = 1; i < vertices.length; i++) {
-      ctx.lineTo(vertices[i].x, vertices[i].y);
+      ctx.lineTo(parseInt(vertices[i].x), parseInt(vertices[i].y));
     }
 
     // Close the path and stroke it
