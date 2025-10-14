@@ -114,9 +114,8 @@ function drawVisualizer() {
   canvasContext.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
   canvasContext.scale(dpr, dpr);
 
-  const rect = canvas.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height * 0.45;
+  const centerX = window.innerWidth / 2;
+  const centerY = window.innerHeight * 0.45;
 
   const innerRadius = vmin * 0.25;
   const stretch = 1.2;
@@ -188,7 +187,8 @@ function loadTrack(index) {
     loadTrack((index + 1) % playlist.length);
   };
 }
-
+document.documentElement.classList.add("stop-scrolling");
+document.body.classList.add('stop-scrolling');
 function startOnFirstClick() {
     if (audioContext.state === 'suspended') {
     audioContext.resume().then(() => {
@@ -207,6 +207,8 @@ function startOnFirstClick() {
   }
 
   document.getElementById("loadingScreen").classList.add('fade-out');
+  document.documentElement.classList.remove("stop-scrolling");
+  document.body.classList.remove('stop-scrolling');
 
   document.removeEventListener('click', startOnFirstClick);
   document.removeEventListener('touchend', startOnFirstClick);
