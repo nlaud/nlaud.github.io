@@ -207,10 +207,10 @@ function startOnFirstClick() {
   document.getElementById("loadingScreen").classList.add('fade-out');
 
   document.removeEventListener('click', startOnFirstClick);
-  document.removeEventListener('touchstart', startOnFirstClick);
+  document.removeEventListener('touchend', startOnFirstClick);
 }
 document.addEventListener('click', startOnFirstClick, {passive: false});
-document.addEventListener('touchstart', startOnFirstClick, {passive: false});
+document.addEventListener('touchend', startOnFirstClick, {passive: false});
 
 
 window.addEventListener('resize', drawVisualizer); // for fast resizing
