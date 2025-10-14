@@ -114,8 +114,10 @@ function drawVisualizer() {
   canvasContext.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
   canvasContext.scale(dpr, dpr);
 
-  const centerX = canvas.clientWidth / 2;
-  const centerY = canvas.clientHeight * 0.45;
+  const rect = canvas.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height * 0.45;
+
   const innerRadius = vmin * 0.25;
   const stretch = 1.2;
 
@@ -232,5 +234,3 @@ muteBtn.addEventListener('click', function() {
     muteBtn.setAttribute('aria-label', 'Mute audio');
   }
 });
-
-//TODO:Rework with gain.
