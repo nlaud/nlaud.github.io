@@ -189,22 +189,25 @@ function loadTrack(index) {
 
 function startOnFirstClick() {
     if (audioContext.state === 'suspended') {
-        audioContext.resume().then(() => {
-          audioElement1.src = playlist[0];
-          audioElement1.load();
-          activeAudioElement = 2;
-          loadTrack(0);
-        });
-    } else {
-        audioElement1.src = playlist[0];
-        audioElement1.load();
-        activeAudioElement = 2;
-        loadTrack(0);
-    }
-    document.getElementById("loadingScreen").classList.add('fade-out');
+    audioContext.resume().then(() => {
+      audioElement1.src = playlist[0];
+      audioElement1.load();
+      audioElement1.play();
+      activeAudioElement = 2;
+      loadTrack(0);
+    });
+  } else {
+    audioElement1.src = playlist[0];
+    audioElement1.load();
+    audioElement1.play();
+    activeAudioElement = 2;
+    loadTrack(0);
+  }
 
-    document.removeEventListener('click', startOnFirstClick);
-    document.removeEventListener('touchstart', startOnFirstClick);
+  document.getElementById("loadingScreen").classList.add('fade-out');
+
+  document.removeEventListener('click', startOnFirstClick);
+  document.removeEventListener('touchstart', startOnFirstClick);
 }
 document.addEventListener('click', startOnFirstClick, {passive: false});
 document.addEventListener('touchstart', startOnFirstClick, {passive: false});
