@@ -434,7 +434,7 @@ body{
 }
 #loadingScreen > h3{
     position:absolute;
-    bottom:0;
+    bottom:25%;
     transform:translateX(-50%);
     left:50%;
 }
