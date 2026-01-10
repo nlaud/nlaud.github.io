@@ -1,133 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!--Meta tags for SEO-->
-    <title>Nathan L.</title>
-    <link rel="icon" href="https://glitch.com/favicon.ico" />
-    <meta name="description" content="My personal website" />
-    <meta name="keywords" content="Nathan, Portfolio, Web Development" />
-    <meta name="author" content="Nathan L." />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <!--External CSS Stuff-->
-    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!--Internal CSS imports-->
-    <link rel="stylesheet" href="index.css" />
-    <script src="audioVisualizer.js" defer></script>
-    <script src="index.js" defer></script>
-  </head>
-  <body>
-    <div id="loadingScreen"><progress id="loadingBar" value="0" max="100"></progress><h3>Press anywhere to start</h3></div>
-    <button id="muteBtn" class = "social email" aria-label="Mute audio"><i class="fas fa-volume-high"></i></button>
-    <div class="home section">
-      <header class="mainheader">
-          <h1 class="mainName">Hi, I'm <br> <div style="color: var(--accent-color)">Nathan</div></h1>
-          <audio id="audioPlayer1" crossorigin="anonymous">
-              <source id="audioSource" src="">
-          </audio>
-          <audio id="audioPlayer2" crossorigin="anonymous">
-              <source id="audioSource" src="">
-          </audio>
-          <canvas id="audioVisualizer"></canvas>
-      </header>
-      <div class="socials-tray">
-        <a href="https://github.com/nlaud" target="_blank" class="social github" aria-label="GitHub"><i class="fab fa-github"></i></a>
-        <a href="https://www.linkedin.com/in/nathan-laud/" target="_blank" class="social linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-        <a onclick="copyEmail()" class="social email" aria-label="Email"><i class="fas fa-envelope"></i></a>
-      </div>
-      <div id='notif' class='notif'>Email copied!</div>
-    </div>
-    <div class = "projects section">
-      <h1>Projects</h1>
-      <div class="projects-grid" id="projectsGrid"></div>
-    </div>
-    <div class="education section">
-      <h1>Education</h1>
-      <div class="edu-card-stack">
-        <div class="edu-horizontal-card">
-          <div class="edu-card-img">
-            <img src="https://www.cmu.edu/brand/brand-guidelines/images/wordmarksquare-red-600x600.png" alt="School Logo" style="width:100%;height:100%;border-radius:18px;">
-          </div>
-          <div class="edu-card-content">
-            <div class="edu-school-name">Carnegie Mellon University</div>
-            <div class="edu-degree">B.S. Computer Science, 2025-2029</div>
-            <div class="edu-details">
-              ▪ Clubs: ACM<br>
-              ▪ Relevant Coursework: Principles of Imperative Computation, Mathematical Foundations for CS
-            </div>
-          </div>
-        </div>
-        
-        <div class="edu-horizontal-card">
-          <div class="edu-card-img">
-            <img src="https://www.imsa.edu/wp-content/uploads/2019/01/IMSA_FullColor_noname.jpg" alt="School Logo" style="width:100%;height:100%;border-radius:18px;">
-          </div>
-          <div class="edu-card-content">
-            <div class="edu-school-name">Illinois Math and Science Academy</div>
-            <div class="edu-degree">Diploma, 2022-2025</div>
-            <div class="edu-details">
-              ▪ Relevant Coursework: CS Seminar: Machine Learning, Web Technologies, Linear Algebra, Multivariable Calculus<br>
-              ▪ Selected Awards: National Merit Finalist, AP Scholar with Distinction, Illinois State Scholar
-            </div>
-          </div>
-        </div>
-    </div>
 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Nathan's Portfolio
+  </title>
+  <link href="https://fonts.cdnfonts.com/css/minecraftia" rel="stylesheet">
+  <link rel="stylesheet" href="/main.css">
+  <link rel="icon" type="image/x-icon" href="/resources/favicon.ico">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@v0.182.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@v0.182.0/examples/jsm/"
+    }
+  }
+  </script>
+  <script type="module" src="/noZoom.js"></script>
+  <script type="module" src="/sound.js"></script>
+</head>
+
+<body>
+  <!-- Orientation Modal -->
+  <div id="orientationModal" class="orientation-modal">
+    <div class="orientation-modal-content">
+      <h1>Rotate to Landscape</h1>
+      <p>Please rotate your device to landscape mode for the best experience</p>
     </div>
-    <div class="experience section">
-      <h1>Experiences</h1>
-      <!-- Timeline Section HTML: Place this where you want your timeline to appear -->
-      <div class="timeline-root">
-        <div class="timeline">
-          <div class="timeline-event">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">Summer 2025</div>
-              <h2>Discovery Partners Institute</h2>
-              <p>▪ Research with Dr. Yuanye Ma to gather global data on cookie consent notices<br>
-              ▪ Utilized Selenium with the common crawl database to scrape websites for cookie consent notices and parse the HTML to
-              extract relevant information (i.e. buttons, links, text)<br>
-              </p>
-            </div>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">Summer 2024</div>
-              <h2>Discovery Partners Institute</h2>
-              <p>▪ Research with Dr. Sugyan Dixit employing AI tools to predict protein dynamics. <br>
-              ▪ Compiled and processed files from the Protein Data Bank using Numpy, Jax, and Biopython</p>
-            </div>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">Fall 2023-25 Spring 2023-24</div>
-              <h2>Argonne National Laboratory</h2>
-              <p>
-              ▪ Conducted research with Dr. Chris Fry at Argonne's Center for Nanoscale Materials creating an AI model to predict novel
-              heme-binding peptides as part of Student Inquiry Research program at IMSA. <br>
-              ▪ Utilized PyTorch, TensorFlow, Keras, and Scikit-learn to create and train LSTM and neural network models utilizing Linux
-              command line with parallel computing. <br>
-              ▪ Gathered, organized, and visualized data from the Protein Data Bank using NumPy, Pandas, Matplotlib, Biopython, and
-              MDanalysis.<br></p>
-            </div>
-          </div>
-          <div class="timeline-event">
-            <div class="timeline-dot"></div>
-            <div class="timeline-content">
-              <div class="timeline-date">2023-2025</div>
-              <h2>Adventures with Mr. Math - Lead TA</h2>
-              <p>▪ Facilitated virtual group meetings for extracurricular math classes and provided individual assistance for elementary
-              school-aged students on a broad range of mathematical topics.</p>
-            </div>
-          </div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loadingScreen">
+    <div id="loadingText">
+      <div id="loadingStatusText">Loading...</div>
+      <div id="loadingPercent">0%</div>
+    </div>
+  </div>
+
+  <!--Music-->
+  <div class="music" id="musicOuter">
+    <iframe class="music"
+      src="https://www.youtube.com/embed/videoseries?si=Z0DcU8XWcjSyKoJP&amp;list=PLUoVDc7LrIafci8pMpNg32Fy5MEd1DnrI&controls=1&modestbranding=1&shuffle=1"
+      title="Minecraft Music" frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      <h1 id="musicIcon">♫</h1>
+  </div>
+
+  <!-- Navigation Areas -->
+  <div class="side-nav left">
+    <button class="nav-button" data-location="experience">Experience</button>
+  </div>
+  <div class="side-nav right">
+    <button class="nav-button" data-location="about">About Me</button>
+  </div>
+  <div class="side-nav bottom">
+    <button class="nav-button" data-location="projects">Projects</button>
+  </div>
+
+  <!-- Book Modal -->
+  <div id="bookModal" class="book-modal-overlay">
+    <div class="book-modal-container">
+      <div class="book-background">
+        <div class="book-content">
+          <div class="book-page-counter">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></div>
+          <div class="book-text" id="bookText"></div>
+        </div>
+        <div class="book-navigation">
+          <button id="prevButton" class="book-nav-button prev-button"></button>
+          <button id="nextButton" class="book-nav-button next-button"></button>
         </div>
       </div>
     </div>
-  </body>
-  
+  </div>
+
+  <!--Main Script-->
+  <script type="module" src="/main.js"></script>
+  <div id='notif' class='notif'>Email copied!</div>
+</body>
+
 </html>
