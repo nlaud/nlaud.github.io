@@ -463,7 +463,7 @@
 
         // shoutouts https://javascript.info/fetch-progress
         const response = await fetch(
-          "./vibin-time/jammin.mp4"
+          "https://nlaud.github.io/projects/vibin-time/jammin.mp4"
         ).catch(e);
         const reader = response.body.getReader();
         const contentLength = +response.headers.get("Content-Length");
