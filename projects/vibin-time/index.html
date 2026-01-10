@@ -269,7 +269,7 @@
         const data = document.getElementById("data");
 
         const e = (m) => (loading.innerText = m);
-        const p = (k) => memes.push(memeformat(k));
+        const p = (k) => memes.push(k);
 
         const memes = [];
         let step = 0;
@@ -379,7 +379,7 @@
 
           p("Made by Brodie (also Timmy)");
           p(
-            'Original (we-are-jammin.xyz)"made mostly at 2am by @PikaDude01 on Twitter"'
+            'Original (we-are-jammin.xyz) "made mostly at 2am by @PikaDude01 on Twitter"'
           );
           p("ヽ(⌐■_■)ノ");
           p("～(■_■)～");
@@ -463,7 +463,7 @@
 
         // shoutouts https://javascript.info/fetch-progress
         const response = await fetch(
-          "https://cdn.glitch.global/5dd54963-e33d-4e33-b464-0c6154c32528/jammin.mp4?v=1701361707702"
+          "./vibin-time/jammin.mp4"
         ).catch(e);
         const reader = response.body.getReader();
         const contentLength = +response.headers.get("Content-Length");
