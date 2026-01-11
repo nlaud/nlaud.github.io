@@ -145,7 +145,7 @@ renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.setAnimationLoop( animate );
 document.body.appendChild( renderer.domElement );
 
-const pixelRatio = Math.min(window.devicePixelRatio, 1.5);
+const pixelRatio = Math.min(window.devicePixelRatio, 1);
 renderer.setPixelRatio(pixelRatio);
 
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -155,20 +155,21 @@ const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
 composer.addPass(renderPass);
 
-const bloomPass = new UnrealBloomPass(
-  new THREE.Vector2(window.innerWidth, window.innerHeight),
-  0.8,  // strength
-  0.3,  // radius
-  1.2   // threshold
-);
-//composer.addPass(bloomPass);
+// Bloom disabled by default - impacts frame rate significantly
+// const bloomPass = new UnrealBloomPass(
+//   new THREE.Vector2(window.innerWidth, window.innerHeight),
+//   0.8,  // strength
+//   0.3,  // radius
+//   1.2   // threshold
+// );
+// composer.addPass(bloomPass);
 
 const fxaaPass = new ShaderPass(FXAAShader);
 fxaaPass.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
 composer.addPass(fxaaPass);
 
 // Skybox
-const skyGeometry = new THREE.SphereGeometry(500, 64, 32);
+const skyGeometry = new THREE.SphereGeometry(500, 32, 16);
 skyGeometry.scale(-1, 1, 1); // Invert for inside view
 
 // Load sun and moon textures
@@ -378,6 +379,7 @@ scene.add(skyDome);
 
 // Clouds - Create animated cloud layer
 const cloudGeometry = new THREE.PlaneGeometry(512, 512);
+cloudGeometry.attributes.position.setUsage(THREE.StaticDrawUsage);
 const cloudMaterial = new THREE.ShaderMaterial({
   uniforms: {
     cloudTexture: { value: cloudsTexture },
@@ -480,10 +482,10 @@ const torchData = [
 ];
 
 torchData.forEach(({ pos: [x,y,z], color, intensity }, index) => {
-  const torch = new THREE.PointLight(color, intensity / 3.5, 15);
+  const torch = new THREE.PointLight(color, intensity / 3.5, 12);
   torch.position.set(x, y, z);
 
-  torch.decay = 0.8;
+  torch.decay = 1.0;
 
   torch.castShadow = false;
   torch.shadow.mapSize.width = 512;
@@ -793,6 +795,7 @@ document.getElementById('loadingScreen').addEventListener('click', () => {
           c.castShadow = c.receiveShadow = false;
           c.frustumCulled = true;
           c.renderOrder = 1;
+          c.matrixAutoUpdate = false;
         }
         if (c.material) {
           const materials = Array.isArray(c.material) ? c.material : [c.material];
@@ -838,7 +841,8 @@ document.getElementById('loadingScreen').addEventListener('click', () => {
       center.y = 38;
       center.z = -71;
       root.position.sub(center);//Center
-
+      root.updateMatrix();
+      root.matrixAutoUpdate = false;
       scene.add(root);
       
       // Store world mesh for distance-based LOD updates
@@ -1069,6 +1073,7 @@ function onPointerDown(event) {
   }
 }
 var lastPointerMoveTime = performance.now();
+var hasHoverTarget = false;
 function onPointerMove(event) {
   const now = performance.now();
   if (now - lastPointerMoveTime < MOUSE_THROTTLE_MS) return;
@@ -1081,11 +1086,10 @@ function onPointerMove(event) {
   raycaster.setFromCamera(mouse, camera);
   const hits = raycaster.intersectObjects(clickableIcons, true);
   
-  if (hits.length > 0) {
-    const hit = hits[0].object;
-    canvas.style.cursor = 'pointer';
-  } else {
-    canvas.style.cursor = 'default';
+  const currentHasHover = hits.length > 0;
+  if (currentHasHover !== hasHoverTarget) {
+    hasHoverTarget = currentHasHover;
+    canvas.style.cursor = hasHoverTarget ? 'pointer' : 'default';
   }
 }
 
@@ -1499,8 +1503,13 @@ function animate() {
     material.uniforms.opacity.value = 0.4 + dayFactor * 0.4; // More opaque during day
     
     // Make clouds follow camera horizontally so they're always visible
-    mesh.position.x = camera.position.x;
-    mesh.position.z = camera.position.z;
+    const dx = Math.abs(mesh.position.x - camera.position.x);
+    const dz = Math.abs(mesh.position.z - camera.position.z);
+    if (dx > 0.1 || dz > 0.1) {
+      mesh.position.x = camera.position.x;
+      mesh.position.z = camera.position.z;
+      mesh.updateMatrix();
+    }
   });
 
   //Render
