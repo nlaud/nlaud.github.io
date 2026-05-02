@@ -98,10 +98,12 @@ const loadingManager = {
     }
     const avgProgress = this.totalAssets > 0 ? totalProgress / this.totalAssets : 0;
     
-    // Cap at 95% until all assets are actually loaded
+    // Use logarithmic progress for smoother progression that doesn't get stuck
+    // Maps 0-1 to 0-0.99, with slower progression as it approaches 1
     let displayProgress = avgProgress;
     if (this.loadedAssets < this.totalAssets) {
-      displayProgress = Math.min(avgProgress, 0.95);
+      displayProgress = 1 - Math.pow(1 - avgProgress, 0.5); // Ease progression
+      displayProgress = Math.min(displayProgress, 0.95); // Cap at 99% until complete
     }
     
     const percent = Math.round(displayProgress * 100);
