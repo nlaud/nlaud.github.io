@@ -103,7 +103,7 @@ const loadingManager = {
     let displayProgress = avgProgress;
     if (this.loadedAssets < this.totalAssets) {
       displayProgress = 1 - Math.pow(1 - avgProgress, 0.5); // Ease progression
-      displayProgress = Math.min(displayProgress, 0.95); // Cap at 99% until complete
+      displayProgress = Math.min(displayProgress, 0.99); // Cap at 99% until complete
     }
     
     const percent = Math.round(displayProgress * 100);
@@ -514,6 +514,7 @@ if (isFirefox) {
 //Ambient
 const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x4a4a4a, 0.6);
 scene.add(hemiLight);
+hemiLight.position.set(0, 25, 0);
 
 // reduce lighting complexity on firefox
 if (isFirefox) {
@@ -1581,10 +1582,10 @@ function animate() {
 
   // Hemisphere sky/ground colors
   hemiLight.color.copy(cachedHemiNightSky).lerp(cachedHemiDaySky, dayFactor);
-  hemiLight.intensity = 1.5 + dayFactor * 1.7;
+  hemiLight.intensity = 15 - dayFactor * 12.8;
 
   scene.fog.color.copy(cachedHemiNightSky).lerp(cachedHemiDaySky, dayFactor);
-  scene.fog.density = 0.01 + 0.005 * (1.0 - dayFactor);
+  scene.fog.density = 0.01
 
   // Update clouds - animate and adjust opacity based on time of day
   cloudLayers.forEach(({ mesh, material, speedMult }) => {
