@@ -12,6 +12,10 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { FXAAShader } from 'three/addons/shaders/FXAAShader.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 
+// detect browser for performance optimization
+const isFirefox = typeof InstallTrigger !== 'undefined';
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
 
@@ -30,12 +34,23 @@ function checkOrientation() {
   }
 }
 
-// Check orientation on load and on resize
+// detect if device is touch-capable
+const isTouchDevice = () => {
+  return (('ontouchstart' in window) ||
+          (navigator.maxTouchPoints > 0) ||
+          (navigator.msMaxTouchPoints > 0));
+};
+
+// add touch-device class to body for CSS media queries
+if (isTouchDevice()) {
+  document.documentElement.classList.add('touch-device');
+}
+
+// check orientation on load and on resize
 window.addEventListener('load', checkOrientation);
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 
-// Check immediately
 checkOrientation();
 
 //DEBUG MODE
@@ -138,18 +153,60 @@ camera.position.set(0, 1.6, 0);
 // Use Three.js Clock for consistent time management
 const clock = new THREE.Clock();
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
+let rendererOptions = { 
+  antialias: true,
+  powerPreference: 'high-performance', // Better for mobile
+  failIfMajorPerformanceCaveat: false, // Allow fallback on weak devices
+  preserveDrawingBuffer: true // For better stability on mobile
+};
+
+// webgl support hehehaw
+let canvas;
+try {
+  canvas = document.createElement('canvas');
+  const webglContext = canvas.getContext('webgl2') || canvas.getContext('webgl');
+  if (!webglContext) {
+    console.warn('WebGL not available, attempting fallback');
+  }
+} catch (e) {
+  console.warn('WebGL initialization check failed:', e);
+}
+
+const renderer = new THREE.WebGLRenderer(rendererOptions);
 renderer.setSize( window.innerWidth, window.innerHeight );
 renderer.shadowMap.enabled = false;
 renderer.shadowMap.type = THREE.PCFShadowMap;
 renderer.setAnimationLoop( animate );
+
+// ios webgl context
+renderer.domElement.addEventListener('webglcontextlost', (event) => {
+  console.warn('WebGL context lost');
+  event.preventDefault();
+}, false);
+
+renderer.domElement.addEventListener('webglcontextrestored', () => {
+  console.log('WebGL context restored');
+}, false);
+
 document.body.appendChild( renderer.domElement );
 
-const pixelRatio = Math.min(window.devicePixelRatio, 1);
+// lower pixel ratio for firefox
+let pixelRatio;
+if (isFirefox) {
+  // limit the ratios on firefox
+  pixelRatio = Math.min(window.devicePixelRatio, 1.0); // Even lower for Firefox
+} else {
+  pixelRatio = Math.min(window.devicePixelRatio, 1.5);
+}
 renderer.setPixelRatio(pixelRatio);
 
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.2;
+
+// disable tone mapping firefox
+if (isFirefox) {
+  renderer.toneMapping = THREE.NoToneMapping;
+}
 
 const composer = new EffectComposer(renderer);
 const renderPass = new RenderPass(scene, camera);
@@ -164,26 +221,37 @@ composer.addPass(renderPass);
 // );
 // composer.addPass(bloomPass);
 
-const fxaaPass = new ShaderPass(FXAAShader);
-fxaaPass.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
-composer.addPass(fxaaPass);
+// disable expensive FXAA shader firefox and safari
+let fxaaPass = null;
+if (!isFirefox && !isSafari) {
+  fxaaPass = new ShaderPass(FXAAShader);
+  fxaaPass.uniforms['resolution'].value.set(1 / window.innerWidth, 1 / window.innerHeight);
+  composer.addPass(fxaaPass);
+} else {
+  console.log('Using native antialiasing for better performance');
+}
 
-// Skybox
-const skyGeometry = new THREE.SphereGeometry(500, 32, 16);
+let skyGeometry;
+if (isFirefox) {
+  // lower-poly sphere to reduce shader overhead
+  skyGeometry = new THREE.SphereGeometry(500, 48, 24);
+} else {
+  skyGeometry = new THREE.SphereGeometry(500, 64, 32);
+}
 skyGeometry.scale(-1, 1, 1); // Invert for inside view
 
-// Load sun and moon textures
 // Texture Loader
 const textureLoader = new THREE.TextureLoader();
 const sunTexture = textureLoader.load('resources/images/sun.png');
 const moonTexture = textureLoader.load('resources/images/moon.png');
 const cloudsTexture = textureLoader.load('resources/images/clouds.png');
-sunTexture.magFilter = THREE.NearestFilter;
-sunTexture.minFilter = THREE.NearestFilter;
-moonTexture.magFilter = THREE.NearestFilter;
-moonTexture.minFilter = THREE.NearestFilter;
-cloudsTexture.magFilter = THREE.NearestFilter;
-cloudsTexture.minFilter = THREE.NearestFilter;
+
+[sunTexture, moonTexture, cloudsTexture].forEach(tex => {
+  tex.magFilter = THREE.NearestFilter;
+  tex.minFilter = THREE.NearestFilter;
+  tex.generateMipmaps = false;
+});
+
 cloudsTexture.wrapS = THREE.RepeatWrapping;
 cloudsTexture.wrapT = THREE.RepeatWrapping;
 
@@ -435,10 +503,20 @@ const cloudLayers = [
 //Fog
 scene.fog = new THREE.FogExp2( 0xcccccc, 0.008 );
 
+// less fog on firefox
+if (isFirefox) {
+  scene.fog.density = 0.006;
+}
+
 //Lighting
 //Ambient
 const hemiLight = new THREE.HemisphereLight(0x87CEEB, 0x4a4a4a, 0.6);
 scene.add(hemiLight);
+
+// reduce lighting complexity on firefox
+if (isFirefox) {
+  hemiLight.intensity = 0.8;
+}
 
 //Sun and Moon
 const sunLight = new THREE.DirectionalLight(0xffe8a3, 2.0);   // warm sun
@@ -481,8 +559,11 @@ const torchData = [
   { pos: [14.5, -22.9, -8.5], color: 0xFBF5D0, intensity: 16},
 ];
 
-torchData.forEach(({ pos: [x,y,z], color, intensity }, index) => {
-  const torch = new THREE.PointLight(color, intensity / 3.5, 12);
+// reduce lights on firefox for performance
+const torchsToLoad = isFirefox ? torchData.slice(0, 12) : torchData; // Use only first 12 torches on Firefox
+
+torchsToLoad.forEach(({ pos: [x,y,z], color, intensity }, index) => {
+  const torch = new THREE.PointLight(color, intensity / 3.5, 15);
   torch.position.set(x, y, z);
 
   torch.decay = 1.0;
@@ -542,7 +623,7 @@ window.addEventListener('mousemove', (event) => {
   // Calculate target rotation (limited to ~60 degrees)
   mouseState.targetRotY = -mouseState.x * 0.5 * cameraControlSensitivity + trueFacingEuler.y; // yaw (horizontal)
   mouseState.targetRotX = -mouseState.y * 0.3 * cameraControlSensitivity + trueFacingEuler.x; // pitch (vertical)
-});
+}, { passive: true }); // scroll performance yes yes
 
 // ===== CAMERA ANIMATION SYSTEM =====
 const cameraAnimation = {
@@ -1050,6 +1131,7 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 function onPointerDown(event) {
   // get canvas bounds
+  const canvas = renderer.domElement;
   const rect = canvas.getBoundingClientRect();
 
   // convert mouse from pixels to normalized device coords (-1 to +1)
@@ -1079,23 +1161,28 @@ function onPointerMove(event) {
   if (now - lastPointerMoveTime < MOUSE_THROTTLE_MS) return;
   lastPointerMoveTime = now;
 
-  const rect = canvas.getBoundingClientRect();
+  const canvasElement = renderer.domElement;
+  const rect = canvasElement.getBoundingClientRect();
   mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
   
   raycaster.setFromCamera(mouse, camera);
   const hits = raycaster.intersectObjects(clickableIcons, true);
   
-  const currentHasHover = hits.length > 0;
-  if (currentHasHover !== hasHoverTarget) {
-    hasHoverTarget = currentHasHover;
-    canvas.style.cursor = hasHoverTarget ? 'pointer' : 'default';
+  if (hits.length > 0) {
+    const hit = hits[0].object;
+    canvasElement.style.cursor = 'pointer';
+  } else {
+    canvasElement.style.cursor = 'default';
   }
 }
 
-const canvas = renderer.domElement;
-canvas.addEventListener('pointerdown', onPointerDown);
-canvas.addEventListener('pointermove', onPointerMove);
+// this genuinely took me 2 hours to debug 💔🐶
+// ur code was canvas instead of renderer so nothing was interacting
+renderer.domElement.addEventListener('pointerdown', onPointerDown);
+renderer.domElement.addEventListener('pointermove', onPointerMove, { passive: true });
+
+var lastPointerMoveTime = performance.now();
 
 var clickableIcons = [];
 var projectImages = [null, null, null, null];
@@ -1516,7 +1603,7 @@ function animate() {
   composer.render();
 }
 
-// Resize handler
+//mobile optimization
 window.addEventListener('resize', () => {
   const width = window.innerWidth;
   const height = window.innerHeight;
@@ -1524,7 +1611,23 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(width, height);
   composer.setSize(width * pixelRatio, height * pixelRatio);
-  fxaaPass.uniforms['resolution'].value.set(1 / width, 1 / height);
+  
+  // fxaa doesnt work on firefox safari anymore
+  if (fxaaPass) {
+    fxaaPass.uniforms['resolution'].value.set(1 / width, 1 / height);
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    // Stop the animation loop when tab is hidden
+    if (renderer.setAnimationLoop) {
+      renderer.setAnimationLoop(null);
+    }
+  } else {
+    // Resume animation loop when tab is visible
+    renderer.setAnimationLoop(animate);
+  }
 });
 
 //Top Music
