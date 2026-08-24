@@ -1188,7 +1188,7 @@ renderer.domElement.addEventListener('pointermove', onPointerMove, { passive: tr
 var lastPointerMoveTime = performance.now();
 
 var clickableIcons = [];
-var projectImages = [null, null, null, null];
+var projectImages = [null, null, null, null, null];
 function createIcon(url, position, rotation, size = 1, clickCallback, heightMult = 1, antialias = true, projectId = -1) {
   const loader = new THREE.TextureLoader();
   var mesh = null;
@@ -1306,7 +1306,8 @@ const projectData = [
   {image:"/resources/images/projects/boidbg.png", link: "https://nlaud.github.io/projects/boidbg/", title:"Boids", description:"A modified implementation of Boid's algorithm using color to form groups."},
   {image:"/resources/images/projects/yt-mixer.png", link: "https://nlaud.github.io/projects/yt-mixer/", title:"Youtube Mixer", description:"A site that uses Youtube's API to create and play playlists without ads!"},
   {image:"/resources/images/projects/vibin-time.png", link: "https://nlaud.github.io/projects/vibin-time/", title:"Vibin' Time", description:"Small prank with friends ..."},
-  {image:"/resources/images/projects/tab-saver.png", link: "https://nlaud.github.io/projects/tab-saver/", title:"Tab Saver", description:"A site to store groups of tabs to be opened together later."}
+  {image:"/resources/images/projects/tab-saver.png", link: "https://nlaud.github.io/projects/tab-saver/", title:"Tab Saver", description:"A site to store groups of tabs to be opened together later."},
+  {image:"/resources/images/projects/poke-rust.png", link: "https://github.com/nlaud/PokeRust", title:"PokeRust", description:"A Pokemon battle simulator in Rust that solves for optimal strategies."}
 ];
 
 var projectMeshes = []
