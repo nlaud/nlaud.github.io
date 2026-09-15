@@ -1188,7 +1188,7 @@ renderer.domElement.addEventListener('pointermove', onPointerMove, { passive: tr
 var lastPointerMoveTime = performance.now();
 
 var clickableIcons = [];
-var projectImages = [null, null, null, null, null];
+var projectImages = []; // one entry per projectData item, filled in as each texture loads
 function createIcon(url, position, rotation, size = 1, clickCallback, heightMult = 1, antialias = true, projectId = -1) {
   const loader = new THREE.TextureLoader();
   var mesh = null;
@@ -1271,6 +1271,7 @@ var bookModel2;
 }
 //Experience Buttons
 const experiencePages = [
+    "Roblox SWE Internship\nMay 2026 - Aug 2026\n-Built and designed an end-to-end data pipeline ingesting high volume event streams with user attributes so that data can be quickly filtered and queried\n-Developed full-stack React features including interactive dashboards with support for various filters",
     "Discovery Partners Institute Research\nSummer 2025\n-Conducted research with Dr. Yuanye Ma to gather global data on cookie consent notices\n-Utilized Python and Selenium with the common crawl database to scrape websites for cookie consent notices and parse the HTML to extract relevant information (i.e. buttons, links, text)\n-Scraped >40,000 sites and found ~1,500 cookie consent notices",
     "Adventures with Mr. Math - Lead TA\n2023 - 2025\n-Facilitated virtual group meetings and performed administrative tasks for extracurricular math classes and provided individual assistance for elementary school-aged students on a broad range of mathematical topics including combinatorics, prime numbers, and logic",
     "Argonne National Laboratory Research\nFall 2023 - Spring 2025\n-Conducted research with Dr. Chris Fry at Argonne's Center for Nanoscale Materials using AI to predict novel heme-binding peptides\n-Ran simulations and trained LSTM and NN models with PyTorch and Scikit-learn, utilizing Linux on Argonne's Improv supercomputer.\n-Gathered, organized, and visualized data from the Protein Data Bank using NumPy, Pandas, Matplotlib, Biopython, and MDanalysis",
@@ -1307,7 +1308,8 @@ const projectData = [
   {image:"/resources/images/projects/yt-mixer.png", link: "https://nlaud.github.io/projects/yt-mixer/", title:"Youtube Mixer", description:"A site that uses Youtube's API to create and play playlists without ads!"},
   {image:"/resources/images/projects/vibin-time.png", link: "https://nlaud.github.io/projects/vibin-time/", title:"Vibin' Time", description:"Small prank with friends ..."},
   {image:"/resources/images/projects/tab-saver.png", link: "https://nlaud.github.io/projects/tab-saver/", title:"Tab Saver", description:"A site to store groups of tabs to be opened together later."},
-  {image:"/resources/images/projects/poke-rust.png", link: "https://github.com/nlaud/PokeRust", title:"PokeRust", description:"A Pokemon battle simulator in Rust that solves for optimal strategies."}
+  {image:"/resources/images/projects/poke-rust.png", link: "https://github.com/nlaud/PokeRust", title:"PokeRust", description:"A Pokemon battle simulator in Rust that solves for optimal strategies."},
+  {image:"/resources/images/projects/mc-fastwiki.png", link: "https://nlaud.github.io/MC-FastWiki/", title:"MC FastWiki", description:"A keyboard-driven Minecraft Java reference built for draftout matches."}
 ];
 
 var projectMeshes = []
@@ -1367,12 +1369,12 @@ function nextProject(){
     item.title.position.set(0, -100, 0);
     item.description.position.set(0, -100, 0);
   });
-  for(var i = 0; i < projectImages.length; i++){
-    projectImages[i].position.set(0, -100, 0);
-  }
+  projectImages.forEach((image) => {
+    if(image) image.position.set(0, -100, 0);
+  });
   projectMeshes[projectIndex].title.position.set(17, -19.75, -8.49);
   projectMeshes[projectIndex].description.position.set(17, -22.125, -8.49);
-  projectImages[projectIndex].position.set(17, -21, -8.49);
+  if(projectImages[projectIndex]) projectImages[projectIndex].position.set(17, -21, -8.49);
 }
 function prevProject(){
   projectIndex = (projectIndex - 1);
@@ -1383,12 +1385,12 @@ function prevProject(){
     item.title.position.set(0, -100, 0);
     item.description.position.set(0, -100, 0);
   });
-  for(var i = 0; i < projectImages.length; i++){
-    projectImages[i].position.set(0, -100, 0);
-  }
+  projectImages.forEach((image) => {
+    if(image) image.position.set(0, -100, 0);
+  });
   projectMeshes[projectIndex].title.position.set(17, -19.75, -8.49);
   projectMeshes[projectIndex].description.position.set(17, -22.125, -8.49);
-  projectImages[projectIndex].position.set(17, -21, -8.49);
+  if(projectImages[projectIndex]) projectImages[projectIndex].position.set(17, -21, -8.49);
 }
 
 var debugTime = 0;
